@@ -1,8 +1,8 @@
 #include <iostream>
-#include "HigherFilter.hpp"
+#include "UpperFilter.hpp"
 
 
-std::vector<signedPixel> HigherFilter::applyFilter(const std::vector<pixel>& image) {
+std::vector<signedPixel> UpperFilter::applyFilter(const std::vector<pixel>& image) {
 
     std::vector<signedPixel> result(image.size(), {0,0,0});
 
@@ -17,7 +17,7 @@ std::vector<signedPixel> HigherFilter::applyFilter(const std::vector<pixel>& ima
     return result;
 }
 
-std::vector<pixel> HigherFilter::removeFilter(const std::vector<signedPixel>& filteredImage) {
+std::vector<pixel> UpperFilter::removeFilter(const std::vector<signedPixel>& filteredImage) {
     
     std::vector<pixel> result(filteredImage.size(), {0,0,0});
 

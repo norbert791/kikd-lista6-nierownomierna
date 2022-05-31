@@ -12,6 +12,7 @@ class TgaAdapter {
         std::vector<pixel> retrieve();
 
         bool persistCopy(std::vector<pixel>, const char* name);
+        bool persistCopy(std::vector<signedPixel>, const char* name);
         void closeFile();
     private:
         TGA* tga;

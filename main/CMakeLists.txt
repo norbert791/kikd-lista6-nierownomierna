@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_CXX_STANDARD 20)
+
+# set the project name
+set(encoder_files encoder.cpp)
+
+#add_subdirectory(${PROJECT_SOURCE_DIR}/adapter)
+
+# add the executable
+add_executable(encoder ${encoder_files})
+
+target_link_libraries(encoder PUBLIC image_adapter coder Filter)
+
+target_include_directories(encoder PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter)
+
+target_compile_options(encoder PUBLIC -Wall -pedantic)

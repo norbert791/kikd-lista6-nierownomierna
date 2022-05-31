@@ -1,25 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_STANDARD 20)
 
 # set the project name
-project(main)
+project(lista6)
 
-# add the MathFunctions library
-add_subdirectory(libtga-master)
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_INSTALL_INCLUDEDIR ${PROJECT_SOURCE_DIR}/include)
+set(CMAKE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
+set(CMAKE_INSTALL_LIBDIR ${PROJECT_SOURCE_DIR}/lib)
+
+include_directories(${CMAKE_INSTALL_INCLUDEDIR})
+include_directories(${CMAKE_INSTALL_LIBDIR})
+
 add_subdirectory(adapter)
 add_subdirectory(coder)
 add_subdirectory(filter)
-
-# add the executable
-add_executable(${PROJECT_NAME} main.cpp Quantizer.cpp TgaAdapter.cpp image.cpp)
-
-target_link_libraries(${PROJECT_NAME} PUBLIC libtga PRIVATE m)
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-                          "${PROJECT_BINARY_DIR}"
-                          "${PROJECT_SOURCE_DIR}/libtga-master"
-                          )
-
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -pedantic)
+add_subdirectory(main)

@@ -73,6 +73,33 @@ bool TgaAdapter::persistCopy(std::vector<pixel> imageCopy, const char* filename)
     return true;
 }
 
+bool TgaAdapter::persistCopy(std::vector<signedPixel> imageCopy, const char* filename) {
+        
+        //Otwieramy plik wyjscia
+        TGA* output = TGAOpen(filename, "w");
+        if (!output || output->last != TGA_OK) {
+            TGAClose(tga);
+            perror("opening error\n");
+            return false;
+        }
+    
+        memcpy(&(output->hdr), &(tga->hdr), sizeof(tga->hdr));
+        size_t counter = 0;
+    
+        for (size_t i = 0; i < height; i++) {
+            for (size_t j = 0; j < width; j++) {
+                data.img_data[counter++] = (uint8_t) imageCopy[i * width + j].red;
+                data.img_data[counter++] = (uint8_t) imageCopy[i * width + j].green;
+                data.img_data[counter++] = (uint8_t) imageCopy[i * width + j].blue;
+            }
+        }
+        
+        TGAWriteImage(output, &data);
+        TGAClose(output);
+        
+        return true;
+}
+
 void TgaAdapter::closeFile() {
     free(data.img_data);
     free(data.cmap);

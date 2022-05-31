@@ -98,15 +98,6 @@ std::vector<int16_t> NonUniformQuantizer::quantize(const std::vector<signedPixel
 //compute distribution and randomly add new values
 std::vector<signedPixel> NonUniformQuantizer::decode(const std::vector<signedPixel>& encoded) {
     std::vector<signedPixel> decoded;
-    decoded.reserve(encoded.size());
-
-    for (auto it : encoded) {
-        signedPixel p;
-        p.red = it.red;
-        p.green = it.green;
-        p.blue = it.blue;
-        decoded.push_back(p);
-    }
-
+    decoded = encoded;
     return decoded;
 }

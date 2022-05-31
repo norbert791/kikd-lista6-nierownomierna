@@ -11,7 +11,11 @@ set(encoder_files encoder.cpp)
 add_executable(encoder ${encoder_files})
 
 target_link_libraries(encoder PUBLIC image_adapter coder Filter)
-
 target_include_directories(encoder PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter)
-
 target_compile_options(encoder PUBLIC -Wall -pedantic)
+
+add_executable(decoder decoder.cpp)
+target_link_libraries(decoder PUBLIC image_adapter coder Filter)
+target_include_directories(decoder PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter)
+target_compile_options(decoder PUBLIC -Wall -pedantic)
+

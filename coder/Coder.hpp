@@ -8,7 +8,7 @@ class Coder {
     public:
         virtual std::vector<signedPixel> encode(const std::vector<signedPixel>& image) = 0;
         virtual std::vector<signedPixel> decode(const std::vector<signedPixel>& image) = 0;
-        virtual ~Coder();
+        virtual ~Coder() = default;
 };
 
 

@@ -8,6 +8,8 @@
 #include "Filter.hpp"
 #include "LowerFilter.hpp"
 #include "UpperFilter.hpp"
+#include "NonUniformConstQuantizer.hpp"
+#include "functions.hpp"
 
 int main (int argv, char** argc) {
     
@@ -28,28 +30,33 @@ int main (int argv, char** argc) {
         return EXIT_FAILURE;
     }
     
+    std::vector<pixel> image = tgaAdapter.retrieve();
     std::unique_ptr<Filter> filter = std::make_unique<LowerFilter>();
 
-    std::unique_ptr<Coder> coder = std::make_unique<DifferentialCoder>();
-
-    std::vector<pixel> image = tgaAdapter.retrieve();
-
     std::vector<signedPixel> filteredImage = filter->applyFilter(image);
-    std::vector<signedPixel> encodedImage = coder->encode(filteredImage);
-
-    if (!tgaAdapter.persistCopy(encodedImage, "encoded_low.tga") ) {
-        perror("Persisting failed");
-        tgaAdapter.closeFile();
-        return EXIT_FAILURE;
-    }
 
     filter = std::make_unique<UpperFilter>();
-    std::unique_ptr<Quantizer> quantizer = std::make_unique<NonUniformQuantizer>();
+    std::vector<signedPixel> filteredImage2 = filter->applyFilter(image);
 
-    filteredImage = filter->applyFilter(image);
-    encodedImage = quantizer->encode(filteredImage, k);
+    size_t res = 0;
+    auto temp = mergeMapping(filteredImage, filteredImage2, res);
 
-    if (!tgaAdapter.persistCopy(encodedImage, "encoded_high.tga") ) {
+    std::vector<signedPixel> t1, t2;
+    t1.reserve(filteredImage.size() / 2);
+    t2.reserve(filteredImage.size() / 2);
+
+    for (size_t i = 0; i < temp.size(); i += 2) {
+        if(i % 2 == 0) {
+            t1.push_back(temp[i]);
+        }
+        else {
+            t2.push_back(temp[i]);
+        }
+    }
+
+    auto temp2 = retrieveMap(t1, t2, res);
+
+    if (!tgaAdapter.persistCopy(temp2, "encoded.tga") ) {
         perror("Persisting failed");
         tgaAdapter.closeFile();
         return EXIT_FAILURE;

@@ -14,3 +14,6 @@ bool operator<(const signedPixel& left, const signedPixel& right) {
 
     return temp1 < temp2;
 }
+signedPixel operator+(const signedPixel& left, const signedPixel& right) {
+    return signedPixel{left.red + right.red, left.green + right.green, left.blue + right.blue};
+}

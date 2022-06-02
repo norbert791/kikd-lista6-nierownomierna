@@ -67,11 +67,11 @@ std::vector<int16_t> NonUniformConstQuantizer::generateQuants(uint8_t bitsPerPix
     std::vector<int16_t> quants;
     size_t pool = numberOfColors;
     size_t iteration = 2;
+    size_t min = 0;
+    size_t max = 8;
 
     while (iteration < 128) {
         size_t subPool = pool / iteration;
-        size_t min = 0;
-        size_t max = 8;
         pool -= subPool;
 
         if (max - min >= subPool) {

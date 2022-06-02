@@ -3,10 +3,15 @@
 
 #include <stdint.h>
 
-typedef struct {
+typedef struct signedPixel signedPixel;
+
+typedef struct pixel{
     uint8_t red;
     uint8_t green;
     uint8_t blue;
+
+    pixel(uint8_t red, uint8_t green, uint8_t blue) : red(red), green(green), blue(blue) {};
+    pixel() = default;
 } pixel; 
 
 bool operator<(const pixel& left, const pixel& right);
@@ -28,10 +33,11 @@ typedef struct signedPixel{
         this->green = green;
         this->blue = blue;
     }
-
 } signedPixel;
 
 bool operator<(const signedPixel& left, const signedPixel& right);
+
+signedPixel operator+(const signedPixel& left, const signedPixel& right);
 /*
 class myComp {
     public:

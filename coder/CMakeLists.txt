@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CODER_SOURCES DifferentialCoder.cpp NonUniformQuantizer.cpp)
-set(CODER_HEADERS DifferentialCoder.hpp NonUniformQuantizer.hpp Quantizer.hpp Coder.hpp)
+set(CODER_SOURCES DifferentialCoder.cpp NonUniformQuantizer.cpp NonUniformConstQuantizer.cpp)
+set(CODER_HEADERS DifferentialCoder.hpp NonUniformQuantizer.hpp Quantizer.hpp Coder.hpp NonUniformConstQuantizer.hpp)
 
 add_library(coder STATIC ${CODER_SOURCES})
 

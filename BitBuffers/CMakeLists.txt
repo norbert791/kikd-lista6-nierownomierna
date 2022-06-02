@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(FILTER_SOURCES LowerFilter.cpp UpperFilter.cpp)
-set(FILTER_HEADERS LowerFilter.h UpperFilter.h Filter.hpp)
+set(BIT_BUFFERS_SOURCES BitReader.cpp BitWriter.cpp bitFiles.cpp BitReader.cpp)
+set(BIT_BUFFERS_HEADERS BitReader.hpp bitWriter.hpp bitFiles.hpp BitReader.hpp)
 
-add_library(Filter STATIC ${FILTER_SOURCES})
+add_library(bitBuffers STATIC ${BIT_BUFFERS_SOURCES})
 
-install(TARGETS Filter DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(FILES ${FILTER_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(TARGETS bitBuffers DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES ${BIT_BUFFERS_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-target_link_libraries(Filter PUBLIC image_adapter)
-target_include_directories(Filter PUBLIC ${PROJECT_SOURCE_DIR}/adapter)
+target_link_libraries(bitBuffers PUBLIC image_adapter)
+target_include_directories(bitBuffers PUBLIC ${PROJECT_SOURCE_DIR}/adapter)

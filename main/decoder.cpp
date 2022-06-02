@@ -8,82 +8,40 @@
 #include "Filter.hpp"
 #include "LowerFilter.hpp"
 #include "UpperFilter.hpp"
+#include "NonUniformConstQuantizer.hpp"
+#include "tgaPersister.hpp"
+#include "bitFiles.hpp"
+#include "functions.hpp"
 
 int main (int argv, char** argc) {
 
-    if (argv < 4) {
-        std::cerr<<"Input name, output name and k requiered"<<std::endl;
+    if (argv < 3) {
+        std::cerr<<"Input name and output name requiered"<<std::endl;
         return EXIT_FAILURE;
     }
-    TgaAdapter tgaAdapter;
-    switch (argc[3][0]) {
-        case 'l':
-            if (tgaAdapter.openFile(argc[1])) {
+    std::vector<signedPixel> image;
+    uint64_t uncompressedSize;
+    uint8_t bitsPerPixel;
+    BitFiles bitFiles;
+    TGAHeader header;
+    std::vector<pixel> retrieved = bitFiles.retrieveImage(argc[1], bitsPerPixel, uncompressedSize, &header);
+       
 
-                std::unique_ptr<Filter> filter = std::make_unique<LowerFilter>();
+    std::vector<signedPixel> filteredImage;
+    std::vector<signedPixel> filteredImage2;
 
-                std::unique_ptr<Coder> coder = std::make_unique<DifferentialCoder>();
+    std::unique_ptr<Quantizer> quantizer = std::make_unique<NonUniformConstQuantizer>(bitsPerPixel);
+    
+    splitMap(filteredImage, filteredImage2, retrieved);
 
-                std::vector<pixel> image = tgaAdapter.retrieve();
+    filteredImage2 = quantizer->decode(filteredImage2);
+    filteredImage = quantizer->decode(filteredImage);
 
-                std::vector<signedPixel> temp;
-                temp.reserve(image.size());
-                for (auto pix : image) {
-                    temp.push_back({pix.red, pix.green, pix.blue});
-                }
+    auto result = retrieveMap(filteredImage, filteredImage2, uncompressedSize);
 
-                std::vector<signedPixel> decodedImage = coder->decode(temp);
-                
-                std::vector<pixel> unfilteredImage = filter->removeFilter(decodedImage);
+    TgaPersister tgaPersister;
 
-                if (!tgaAdapter.persistCopy(unfilteredImage, argc[2]) ) {
-                    perror("Persisting failed");
-                    tgaAdapter.closeFile();
-                    return EXIT_FAILURE;
-                }
+    tgaPersister.persistImage(argc[2], uncompressedSize, result, &header);
 
-                tgaAdapter.closeFile();
-            }
-            else {
-                std::cerr<<"Opening failed"<<std::endl;
-                return EXIT_FAILURE;
-            }
-            break;
-
-        case 'h':
-            if (tgaAdapter.openFile(argc[1])) {
-
-                std::unique_ptr<Filter> filter = std::make_unique<UpperFilter>();
-
-                std::unique_ptr<Quantizer> quantizer = std::make_unique<NonUniformQuantizer>();
-
-                std::vector<pixel> image = tgaAdapter.retrieve();
-
-                std::vector<signedPixel> temp;
-                temp.reserve(image.size());
-                for (auto pix : image) {
-                    temp.push_back({pix.red, pix.green, pix.blue});
-                }
-
-                std::vector<signedPixel> decodedImage = quantizer->decode(temp);
-                std::vector<pixel> unfilteredImage = filter->removeFilter(decodedImage);
-
-                if (!tgaAdapter.persistCopy(unfilteredImage, argc[2]) ) {
-                    perror("Persisting failed");
-                    tgaAdapter.closeFile();
-                    return EXIT_FAILURE;
-                }
-
-                tgaAdapter.closeFile();
-            }
-            else {
-                std::cerr<<"Opening failed"<<std::endl;
-                return EXIT_FAILURE;
-            }
-            break;
-        default:
-            std::cerr<<"l=low h=hight"<<std::endl;
-            return EXIT_FAILURE;
-    }
     return 0;
 }

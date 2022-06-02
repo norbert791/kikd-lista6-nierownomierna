@@ -106,3 +106,7 @@ void TgaAdapter::closeFile() {
     free(data.img_id);
     TGAClose(tga);
 }
+
+void TgaAdapter::getHeader(TGAHeader* header) {
+    memcpy(header, &(tga->hdr), sizeof(tga->hdr));
+}

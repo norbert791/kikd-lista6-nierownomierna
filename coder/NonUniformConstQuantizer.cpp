@@ -3,7 +3,7 @@
 #include "NonUniformConstQuantizer.hpp"
 
 
-NonUniformConstQuantizer::NonUniformConstQuantizer(uint8_t bitsPerPixel) : bitsPerPixel(bitsPerPixel) {
+NonUniformConstQuantizer::NonUniformConstQuantizer(uint8_t bitsPerPixel) {
     this->levels = bitsPerPixel;
 }
 

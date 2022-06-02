@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(ADAPTER_SOURCES image.cpp TgaAdapter.cpp)
-set(ADAPTER_HEADERS image_adapter.hpp)
+set(ADAPTER_SOURCES image.cpp TgaAdapter.cpp tgaPersister.cpp)
+set(ADAPTER_HEADERS image_adapter.hpp tgaPersister.hpp)
 
 add_subdirectory(libtga-master)
 

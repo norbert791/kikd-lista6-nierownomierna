@@ -5,13 +5,15 @@
 #include "image.h"
 #include "BitWriter.hpp"
 #include "BitReader.hpp"
+#include "TgaAdapter.hpp"
 
 class BitFiles {
 
     public:
         void persistImage(const char* fileName, uint8_t bitsPerPixel,
-                          uint64_t uncompressedSize, const std::vector<pixel>& pixels);
-        std::vector<pixel> retrieveImage(const char* fileName);
+                          uint64_t uncompressedSize, const std::vector<pixel>& pixels,
+                          TGAHeader* header);
+        std::vector<pixel> retrieveImage(const char* fileName, uint8_t& bitsPerPixel, uint64_t& uncompressedSize, TGAHeader* header);
 };
 
 #endif

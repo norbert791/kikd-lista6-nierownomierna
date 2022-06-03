@@ -69,39 +69,50 @@ std::vector<int16_t> NonUniformConstQuantizer::generateQuants(uint8_t bitsPerPix
     size_t iteration = 2;
     size_t min = 0;
     size_t max = 8;
+    size_t lastPool = 0;
 
-    while (iteration < 128) {
-        size_t subPool = pool / iteration;
-        pool -= subPool;
-
-        if (max - min >= subPool) {
+    while (iteration < 128 && pool > 0) {
+        size_t subPool = numberOfColors / iteration;
+        subPool += lastPool;
+        if (subPool == 0) {
+            break;
+        }
+        if (max - min <= subPool) {
             for (size_t i = min; i < max; i++) {
                 quants.push_back(i);
                 subPool--;
+                pool--;
             }
+            lastPool = subPool;
         }
         else {
+            //std::cout<<subPool<<std::endl;
             size_t step = (max - min) / subPool + ((max - min) % subPool != 0);
-           for (size_t i = min; subPool > 0; i += step) {
+           for (size_t i = min; subPool > 0 && i < max; i += step) {
                 quants.push_back(i);
                 subPool--;
+                pool--;
             }
         }
+       // std::cout<<"here"<<iteration<<std::endl;
         pool += subPool;
+        lastPool = subPool;
 
         min = max;
         max *= 2;
         iteration *= 2;
     }
-
-    size_t step = (max - min) / pool + ((max - min) % pool != 0);
-
-    while (pool > 0) {
-        quants.push_back(min + step * pool);
-        pool--;
+   // std::cout<<"out"<<std::endl;
+    if (pool > 0) {
+        size_t step = (max - min) / pool;
+        while (pool > 0) {
+            quants.push_back(min + step);
+            step++;
+            pool--;
+        }
     }
-
-    for (size_t i = 1; i < quants.size(); i++) {
+    auto temp = quants.size();
+    for (size_t i = 1; i < temp; i++) {
         quants.push_back(-quants[i]);
     }
     std::sort(quants.begin(), quants.end());

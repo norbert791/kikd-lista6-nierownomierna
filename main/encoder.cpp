@@ -1,6 +1,7 @@
 #include <memory>
 #include <iostream>
 #include <cstring>
+#include <assert.h>
 #include "TgaAdapter.hpp"
 #include "Coder.hpp"
 #include "DifferentialCoder.hpp"
@@ -59,6 +60,7 @@ int main (int argv, char** argc) {
 
     TGAHeader header;
     tgaAdapter.getHeader(&header);
+    
     bitFiles.persistImage(argc[2], k, res, result, &header);
     tgaAdapter.closeFile();
 

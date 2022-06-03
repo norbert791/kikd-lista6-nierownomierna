@@ -22,7 +22,6 @@ std::vector<signedPixel> mergeMapping(const std::vector<signedPixel>& lowerFilte
 
 std::vector<pixel> retrieveMap(const std::vector<signedPixel>& lowerFilter, const std::vector<signedPixel>& upperFilter, size_t& realSize) {
 
-    realSize = 0;
     std::vector<pixel> result;
     result.reserve(lowerFilter.size());
 

@@ -1,6 +1,7 @@
 #include <memory>
 #include <iostream>
 #include <cstring>
+#include <assert.h>
 #include "TgaAdapter.hpp"
 #include "Coder.hpp"
 #include "DifferentialCoder.hpp"
@@ -25,7 +26,7 @@ int main (int argv, char** argc) {
     BitFiles bitFiles;
     TGAHeader header;
     std::vector<pixel> retrieved = bitFiles.retrieveImage(argc[1], bitsPerPixel, uncompressedSize, &header);
-       
+    
 
     std::vector<signedPixel> filteredImage;
     std::vector<signedPixel> filteredImage2;
@@ -37,8 +38,9 @@ int main (int argv, char** argc) {
     filteredImage2 = quantizer->decode(filteredImage2);
     filteredImage = quantizer->decode(filteredImage);
 
+   
     auto result = retrieveMap(filteredImage, filteredImage2, uncompressedSize);
-
+    assert(uncompressedSize == header.width * header.height);
     TgaPersister tgaPersister;
 
     tgaPersister.persistImage(argc[2], uncompressedSize, result, &header);

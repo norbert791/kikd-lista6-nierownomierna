@@ -14,9 +14,9 @@
 #include "bitFiles.hpp"
 #include "functions.hpp"
 
-int main (int argv, char** argc) {
+int main (int argc, char** argv) {
 
-    if (argv < 3) {
+    if (argc < 3) {
         std::cerr<<"Input name and output name requiered"<<std::endl;
         return EXIT_FAILURE;
     }
@@ -25,7 +25,7 @@ int main (int argv, char** argc) {
     uint8_t bitsPerPixel;
     BitFiles bitFiles;
     TGAHeader header;
-    std::vector<pixel> retrieved = bitFiles.retrieveImage(argc[1], bitsPerPixel, uncompressedSize, &header);
+    std::vector<pixel> retrieved = bitFiles.retrieveImage(argv[1], bitsPerPixel, uncompressedSize, &header);
     
 
     std::vector<signedPixel> filteredImage;
@@ -38,12 +38,12 @@ int main (int argv, char** argc) {
     filteredImage2 = quantizer->decode(filteredImage2);
     filteredImage = quantizer->decode(filteredImage);
 
-   
-    auto result = retrieveMap(filteredImage, filteredImage2, uncompressedSize);
-    assert(uncompressedSize == header.width * header.height);
+    size_t tempSize = uncompressedSize;
+    auto result = retrieveMap(filteredImage, filteredImage2, tempSize);
+    //assert(uncompressedSize == header.width * header.height);
     TgaPersister tgaPersister;
 
-    tgaPersister.persistImage(argc[2], uncompressedSize, result, &header);
+    tgaPersister.persistImage(argv[2], uncompressedSize, result, &header);
 
     return 0;
 }

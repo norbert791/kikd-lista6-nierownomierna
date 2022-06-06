@@ -23,3 +23,8 @@ add_executable(test test.cpp functions.cpp)
 target_link_libraries(test PUBLIC image_adapter coder bitBuffers)
 target_include_directories(test PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter ${PROJECT_SOURCE_DIR}/BitBuffers)
 target_compile_options(test PUBLIC -Wall -pedantic)
+
+add_executable(diff diff.cpp functions.cpp)
+target_link_libraries(diff PUBLIC image_adapter coder bitBuffers)
+target_include_directories(diff PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter ${PROJECT_SOURCE_DIR}/BitBuffers)
+target_compile_options(diff PUBLIC -Wall -pedantic)

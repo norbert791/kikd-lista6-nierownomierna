@@ -3,6 +3,7 @@
 #include <cstring>
 #include <assert.h>
 #include <iostream>
+#include <functional>
 #include "TgaAdapter.hpp"
 #include "Coder.hpp"
 #include "DifferentialCoder.hpp"
@@ -15,6 +16,8 @@
 #include "bitFiles.hpp"
 #include "tgaPersister.hpp"
 
+
+ 
 
 int main (int argv, char** argc) {
     
@@ -69,5 +72,6 @@ int main (int argv, char** argc) {
     persister.persistImage(argc[2], temp2, image, &header);
 
     adapter.closeFile();
+
 
 }

@@ -38,7 +38,7 @@ std::vector<int16_t> NonUniformQuantizer::quantize(const std::vector<signedPixel
         histogram[quantizedPixel]++;
     }
 
-    uint8_t numOfValues = 255 >> (8 - bits) + 1;
+    uint8_t numOfValues = (255 >> (8 - bits)) + 1;
 
     std::vector<int16_t> quantizedImage;
 

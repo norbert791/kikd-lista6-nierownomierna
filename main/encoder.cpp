@@ -55,7 +55,7 @@ int main (int argv, char** argc) {
     std::vector<pixel> result;
 
     for (auto pix : temp) {
-        result.push_back(pixel{pix.red, pix.green, pix.blue});
+        result.push_back(pixel{(uint8_t)pix.red, (uint8_t)pix.green, (uint8_t)pix.blue});
     }
 
     TGAHeader header;

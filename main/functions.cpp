@@ -34,12 +34,12 @@ std::vector<pixel> retrieveMap(const std::vector<signedPixel>& lowerFilter, cons
         temp2.red = 2 * temp2.red - temp.red;
         temp2.green = 2 * temp2.green - temp.green;
         temp2.blue = 2 * temp2.blue - temp.blue;
-        result.push_back((pixel){(uint8_t)temp.red, (uint8_t)temp.green, (uint8_t)temp.blue});
-        result.push_back((pixel){(uint8_t)temp2.red, (uint8_t)temp2.green, (uint8_t)temp2.blue});
+        result.push_back({(uint8_t)temp.red, (uint8_t)temp.green, (uint8_t)temp.blue});
+        result.push_back({(uint8_t)temp2.red, (uint8_t)temp2.green, (uint8_t)temp2.blue});
     }
     if (realSize % 2 != 0) {
         auto temp = lowerFilter[lowerFilter.size() - 1] + upperFilter[upperFilter.size() - 1];
-        result.push_back((pixel){(uint8_t)temp.red, (uint8_t)temp.green, (uint8_t)temp.blue});
+        result.push_back({(uint8_t)temp.red, (uint8_t)temp.green, (uint8_t)temp.blue});
     }
 
     return result;

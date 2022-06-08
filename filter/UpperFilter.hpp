@@ -6,7 +6,7 @@
 class UpperFilter : public Filter {
     public:
         virtual std::vector<signedPixel> applyFilter(const std::vector<pixel>& image) override;
-        virtual std::vector<pixel> removeFilter(const std::vector<signedPixel>& filteredImage) override;
+        virtual std::vector<signedPixel> removeFilter(const std::vector<signedPixel>& filteredImage) override;
 };
 
 

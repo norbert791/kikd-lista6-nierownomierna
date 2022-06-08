@@ -7,11 +7,13 @@
 #include "DifferentialCoder.hpp"
 #include "NonUniformQuantizer.hpp"
 #include "Filter.hpp"
-#include "LowerFilter.hpp"
-#include "UpperFilter.hpp"
 #include "NonUniformConstQuantizer.hpp"
 #include "functions.hpp"
 #include "bitFiles.hpp"
+#include "LowerFilterProcess.hpp"
+#include "UpperFilterProcess.hpp"
+#include "FilterQuantizer.hpp"
+#include "UniformFilterQuantizer.hpp"
 
 int main (int argv, char** argc) {
     
@@ -32,20 +34,16 @@ int main (int argv, char** argc) {
         return EXIT_FAILURE;
     }
     
-    std::unique_ptr<Quantizer> quantizer = std::make_unique<NonUniformConstQuantizer>(k);
     std::vector<pixel> image = tgaAdapter.retrieve();
     
-    std::unique_ptr<Filter> filter = std::make_unique<LowerFilter>();
+    std::unique_ptr<Filter> filter = std::make_unique<LowerFilterProcess>(std::make_unique<UniformFilterQuantizer>(k));
 
     std::vector<signedPixel> filteredImage = filter->applyFilter(image);
 
-    filter = std::make_unique<UpperFilter>();
+    filter = std::make_unique<UpperFilterProcess>(std::make_unique<UniformFilterQuantizer>(k));
     std::vector<signedPixel> filteredImage2 = filter->applyFilter(image);
 
     size_t res = 0;
-
-    filteredImage = quantizer->encode(filteredImage, k);
-    filteredImage2 = quantizer->encode(filteredImage2, k);
 
     auto temp = mergeMapping(filteredImage, filteredImage2, res);
 

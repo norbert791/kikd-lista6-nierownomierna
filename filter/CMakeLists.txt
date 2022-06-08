@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(FILTER_SOURCES LowerFilter.cpp UpperFilter.cpp)
-set(FILTER_HEADERS LowerFilter.hpp UpperFilter.hpp Filter.hpp)
+set(FILTER_SOURCES UpperFilterProcess.cpp LowerFilterProcess.cpp UniformFilterQuantizer.cpp)
+set(FILTER_HEADERS Filter.hpp UpperFilterProcess.hpp LowerFilterProcess.hpp UniformFilterQuantizer.hpp)
 
 add_library(Filter STATIC ${FILTER_SOURCES})
 

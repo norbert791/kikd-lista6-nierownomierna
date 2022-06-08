@@ -5,11 +5,11 @@
 #include "TgaAdapter.hpp"
 #include "Coder.hpp"
 #include "DifferentialCoder.hpp"
-#include "NonUniformQuantizer.hpp"
 #include "Filter.hpp"
-#include "LowerFilter.hpp"
-#include "UpperFilter.hpp"
-#include "NonUniformConstQuantizer.hpp"
+#include "LowerFilterProcess.hpp"
+#include "UpperFilterProcess.hpp"
+#include "FilterQuantizer.hpp"
+#include "UniformFilterQuantizer.hpp"
 #include "tgaPersister.hpp"
 #include "bitFiles.hpp"
 #include "functions.hpp"
@@ -30,13 +30,17 @@ int main (int argc, char** argv) {
 
     std::vector<signedPixel> filteredImage;
     std::vector<signedPixel> filteredImage2;
-
-    std::unique_ptr<Quantizer> quantizer = std::make_unique<NonUniformConstQuantizer>(bitsPerPixel);
     
     splitMap(filteredImage, filteredImage2, retrieved);
 
-    filteredImage2 = quantizer->decode(filteredImage2);
-    filteredImage = quantizer->decode(filteredImage);
+    std::unique_ptr<Filter> filter = std::make_unique<UpperFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));   
+
+    //filteredImage2 = filter->removeFilter(filteredImage2);
+
+    //filter = std::make_unique<LowerFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));
+
+    filteredImage = filter->removeFilter(filteredImage);
+
 
     size_t tempSize = uncompressedSize;
     auto result = retrieveMap(filteredImage, filteredImage2, tempSize);

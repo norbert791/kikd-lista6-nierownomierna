@@ -8,7 +8,9 @@ std::vector<signedPixel> UpperFilterProcess::applyFilter(const std::vector<pixel
     result[0] = quantizer->assignQuant(image[0]);
 
     for (size_t i = 1; i < image.size(); i++) {
-        signedPixel temp = {image[i].red - result[i - 1].red, image[i].green - result[i - 1].green, image[i].blue - result[i - 1].blue};
+        signedPixel temp = {(int16_t) ((int16_t) image[i].red - (int16_t) result[i - 1].red), 
+                            (int16_t) ((int16_t) image[i].green - (int16_t) result[i - 1].green), 
+                            (int16_t) ((int16_t) image[i].blue - (int16_t) result[i - 1].blue)};
         result[i] = temp;
     }
 

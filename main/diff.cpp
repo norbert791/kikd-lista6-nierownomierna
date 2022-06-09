@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     double mse[4] = {mean_squere_error(header.height, header.width, 
     inputVector, result, [](pixel pix){
-        return ((uint32_t)pix.red) << 16 + ((uint32_t)pix.green) << 8 + pix.blue; }),
+        return (((uint32_t)pix.red) << 16) + (((uint32_t)pix.green) << 8) + pix.blue; }),
         mean_squere_error(header.height, header.width, inputVector, result, [](pixel pix){return pix.red;}),
         mean_squere_error(header.height, header.width, inputVector, result, [](pixel pix){return pix.green;}),
         mean_squere_error(header.height, header.width, inputVector, result, [](pixel pix){return pix.blue;})
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     
     double noise[4] = {signal_to_noise_ratio(header.height, header.width, 
     inputVector, [](pixel pix){
-        return ((uint32_t)pix.red) << 16 + ((uint32_t)pix.green) << 8 + pix.blue; }, mse[0]),
+        return (((uint32_t)pix.red) << 16) + (((uint32_t)pix.green) << 8) + pix.blue; }, mse[0]),
         signal_to_noise_ratio(header.height, header.width, inputVector, [](pixel pix){return pix.red;}, mse[1]),
         signal_to_noise_ratio(header.height, header.width, inputVector, [](pixel pix){return pix.green;}, mse[1]),
         signal_to_noise_ratio(header.height, header.width, inputVector, [](pixel pix){return pix.blue;}, mse[1])

@@ -5,14 +5,16 @@
 #include "TgaAdapter.hpp"
 #include "Coder.hpp"
 #include "DifferentialCoder.hpp"
+#include "NonUniformQuantizer.hpp"
 #include "Filter.hpp"
+#include "NonUniformConstQuantizer.hpp"
+#include "functions.hpp"
+#include "bitFiles.hpp"
 #include "LowerFilterProcess.hpp"
 #include "UpperFilterProcess.hpp"
 #include "FilterQuantizer.hpp"
 #include "UniformFilterQuantizer.hpp"
 #include "tgaPersister.hpp"
-#include "bitFiles.hpp"
-#include "functions.hpp"
 
 int main (int argc, char** argv) {
 
@@ -33,11 +35,11 @@ int main (int argc, char** argv) {
     
     splitMap(filteredImage, filteredImage2, retrieved);
 
-    std::unique_ptr<Filter> filter = std::make_unique<UpperFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));   
+    std::unique_ptr<Filter> filter = std::make_unique<UpperFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));  
 
-    //filteredImage2 = filter->removeFilter(filteredImage2);
+    filteredImage2 = filter->removeFilter(filteredImage2);
 
-    //filter = std::make_unique<LowerFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));
+    filter = std::make_unique<LowerFilterProcess>(std::make_unique<UniformFilterQuantizer>(bitsPerPixel));
 
     filteredImage = filter->removeFilter(filteredImage);
 

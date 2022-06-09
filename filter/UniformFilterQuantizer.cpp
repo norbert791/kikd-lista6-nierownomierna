@@ -31,9 +31,9 @@ std::vector<signedPixel> UniformFilterQuantizer::mapToIndexes(const std::vector<
     std::vector<signedPixel> result;
     result.reserve(image.size());
     for (auto& pixel : image) {
-        auto r = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.red) - quantVector.begin();
-        auto g = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.green) - quantVector.begin();
-        auto b = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.blue) - quantVector.begin();
+        int16_t r = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.red) - quantVector.begin();
+        int16_t g = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.green) - quantVector.begin();
+        int16_t b = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.blue) - quantVector.begin();
         result.push_back(signedPixel{r, g, b});
     }
     return result;

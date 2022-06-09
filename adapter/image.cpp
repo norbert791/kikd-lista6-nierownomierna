@@ -17,3 +17,6 @@ bool operator<(const signedPixel& left, const signedPixel& right) {
 signedPixel operator+(const signedPixel& left, const signedPixel& right) {
     return signedPixel{(int16_t)(left.red + right.red), (int16_t)(left.green + right.green), (int16_t)(left.blue + right.blue)};
 }
+signedPixel operator-(const signedPixel& left, const signedPixel& right) {
+    return signedPixel{(int16_t)(left.red - right.red), (int16_t)(left.green - right.green), (int16_t)(left.blue - right.blue)};
+}

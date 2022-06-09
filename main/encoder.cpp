@@ -14,6 +14,7 @@
 #include "UpperFilterProcess.hpp"
 #include "FilterQuantizer.hpp"
 #include "UniformFilterQuantizer.hpp"
+#include "image.h"
 
 int main (int argv, char** argc) {
     
@@ -53,6 +54,7 @@ int main (int argv, char** argc) {
     std::vector<pixel> result;
 
     for (auto pix : temp) {
+        //std::cout<<pix.red<<" "<<pix.green<<" "<<pix.blue<<std::endl;
         result.push_back(pixel{(uint8_t)pix.red, (uint8_t)pix.green, (uint8_t)pix.blue});
     }
 

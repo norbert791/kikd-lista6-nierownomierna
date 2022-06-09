@@ -10,8 +10,8 @@ UniformFilterQuantizer::UniformFilterQuantizer(uint8_t bitsPerPixel) {
 
     auto numberOfColors = pow(2, bitsPerPixel);
 
-    size_t step = 512 / numberOfColors;
-    for (size_t index = -255; index < 256 - step; index += step) {
+    int16_t step = 512 / numberOfColors;
+    for (int16_t index = -255; index < 256 - step; index += step) {
         quantVector.push_back(index + step / 2);
     }
 }
@@ -31,9 +31,9 @@ std::vector<signedPixel> UniformFilterQuantizer::mapToIndexes(const std::vector<
     std::vector<signedPixel> result;
     result.reserve(image.size());
     for (auto& pixel : image) {
-        int16_t r = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.red) - quantVector.begin();
-        int16_t g = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.green) - quantVector.begin();
-        int16_t b = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.blue) - quantVector.begin();
+        int16_t r = std::find(quantVector.begin(), quantVector.end(), pixel.red) - quantVector.begin();
+        int16_t g = std::find(quantVector.begin(), quantVector.end(), pixel.green) - quantVector.begin();
+        int16_t b = std::find(quantVector.begin(), quantVector.end(), pixel.blue) - quantVector.begin();
         result.push_back(signedPixel{r, g, b});
     }
     return result;

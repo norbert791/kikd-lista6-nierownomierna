@@ -2,6 +2,7 @@
 #define IMAGE_H
 
 #include <stdint.h>
+#include <iostream>
 
 typedef struct signedPixel signedPixel;
 
@@ -38,6 +39,7 @@ typedef struct signedPixel{
 bool operator<(const signedPixel& left, const signedPixel& right);
 
 signedPixel operator+(const signedPixel& left, const signedPixel& right);
+signedPixel operator-(const signedPixel& left, const signedPixel& right);
 /*
 class myComp {
     public:

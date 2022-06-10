@@ -45,8 +45,11 @@ int main (int argc, char** argv) {
 
 
     size_t tempSize = uncompressedSize;
-    auto result = retrieveMap(filteredImage, filteredImage2, tempSize);
+    //auto result = retrieveMap(filteredImage, filteredImage2, tempSize);
     //assert(uncompressedSize == header.width * header.height);
+    std::vector<pixel> result;
+    result.reserve(tempSize);
+    
     TgaPersister tgaPersister;
 
     tgaPersister.persistImage(argv[2], uncompressedSize, result, &header);

@@ -1,6 +1,11 @@
 #include "LowerFilterProcess.hpp"
+#include <iostream>
+#include <set>
 
 std::vector<signedPixel> LowerFilterProcess::applyFilter(const std::vector<pixel>& image) {
+
+    std::set<signedPixel> vals;
+    std::set<signedPixel> inds;
 
     std::vector<signedPixel> result(image.size(), {0,0,0});
 
@@ -11,7 +16,8 @@ std::vector<signedPixel> LowerFilterProcess::applyFilter(const std::vector<pixel
         signedPixel filteredPixel = {(int16_t) ((int16_t) image[i].red / 2 + (int16_t) image[i - 1].red / 2 + (image[i].red & image[i - 1].red & 1)),
                             (int16_t) ((int16_t) image[i].green / 2 + (int16_t) image[i - 1].green / 2 + (image[i].green & image[i - 1].green & 1)), 
                             (int16_t) ((int16_t) image[i].blue / 2 + (int16_t) image[i - 1].blue / 2 + (image[i].blue & image[i - 1].blue & 1))};
-        //std::cout<<temp.red<<" "<<temp.green<<" "<<temp.blue<<std::endl;
+        //std::cout<<filteredPixel.red<<" "<<filteredPixel.green<<" "<<filteredPixel.blue<<std::endl;
+        result[i] = filteredPixel;
     }
 
     std::vector<signedPixel> finalResult;
@@ -22,9 +28,11 @@ std::vector<signedPixel> LowerFilterProcess::applyFilter(const std::vector<pixel
     for (size_t i = 1; i < result.size(); i++) {
         signedPixel temp = result[i] - result[i - 1] + lastError;
         finalResult[i] = quantizer->assignQuant(temp);
-        lastError = temp - finalResult[i];
+       // std::cout<<finalResult[i].red<<" "<<finalResult[i].green<<" "<<finalResult[i].blue<<std::endl;
+        lastError = result[i] - finalResult[i];
+        inds.insert(finalResult[i]);
     }
-
+    std::cout<<"inds.size() = "<<inds.size()<<std::endl;
     return quantizer->mapToIndexes(result);
 }
 

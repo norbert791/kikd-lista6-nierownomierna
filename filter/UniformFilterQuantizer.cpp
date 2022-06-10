@@ -20,7 +20,7 @@ signedPixel UniformFilterQuantizer::assignQuant(signedPixel pixel) {
     auto r = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.red);
     auto g = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.green);
     auto b = std::lower_bound(quantVector.begin(), quantVector.end(), pixel.blue);
-    signedPixel result{0,0,0};
+
     auto fun = [&](auto it) {if (it == quantVector.end()) return *(--it); else return *it;};
     return signedPixel{fun(r), fun(g), fun(b)};
 }

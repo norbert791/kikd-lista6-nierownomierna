@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <cmath>
 
 typedef struct signedPixel signedPixel;
 
@@ -34,6 +35,11 @@ typedef struct signedPixel{
         this->green = green;
         this->blue = blue;
     }
+   /* signedPixel(float red, float green, float blue) {
+        this->red = (int16_t) float(red);
+        this->green = (int16_t) float(green);
+        this->blue = (int16_t) float(blue);
+    }*/
 } signedPixel;
 
 bool operator<(const signedPixel& left, const signedPixel& right);
@@ -50,5 +56,30 @@ class myComp {
         }
 
 };*/
+
+
+typedef struct floatPixel{
+
+    float red;
+    float green;
+    float blue;
+
+    floatPixel() = default;
+    floatPixel(pixel pix) {
+        red = pix.red * 1.0f;
+        green = pix.green * 1.0f;
+        blue = pix.blue * 1.0f;
+    }
+    floatPixel(float red, float green, float blue) {
+        this->red = red;
+        this->green = green;
+        this->blue = blue;
+    }
+} floatPixel;
+
+bool operator<(const floatPixel& left, const floatPixel& right);
+
+floatPixel operator+(const floatPixel& left, const floatPixel& right);
+floatPixel operator-(const floatPixel& left, const floatPixel& right);
 
 #endif

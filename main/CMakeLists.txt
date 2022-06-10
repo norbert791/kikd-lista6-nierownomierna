@@ -20,7 +20,7 @@ target_include_directories(decoder PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJEC
 target_compile_options(decoder PUBLIC -Wall -pedantic)
 
 add_executable(test test.cpp functions.cpp)
-target_link_libraries(test PUBLIC image_adapter coder bitBuffers)
+target_link_libraries(test PUBLIC image_adapter coder Filter bitBuffers)
 target_include_directories(test PUBLIC ${PROJECT_SOURCE_DIR}/adapter ${PROJECT_SOURCE_DIR}/coder ${PROJECT_SOURCE_DIR}/filter ${PROJECT_SOURCE_DIR}/BitBuffers)
 target_compile_options(test PUBLIC -Wall -pedantic)
 

@@ -15,7 +15,11 @@
 #include "functions.hpp"
 #include "bitFiles.hpp"
 #include "tgaPersister.hpp"
-
+#include "LowerFilterProcess.hpp"
+#include "UpperFilterProcess.hpp"
+#include "FilterQuantizer.hpp"
+#include "UniformFilterQuantizer.hpp"
+#include "IdQuantizer.hpp"
 
  
 
@@ -26,52 +30,36 @@ int main (int argv, char** argc) {
     adapter.openFile(argc[1]);
     adapter.getHeader(&header);
     std::vector<pixel> image = adapter.retrieve();
-    auto headerCopy = header;
-
-/*
-    BitWriter chuj = BitWriter();
-    chuj.open("chujTest.txt");
-    uint8_t buff[sizeof(TGAHeader)];
-    memcpy(buff, &header, sizeof(TGAHeader));
-    for (size_t i = 0; i < sizeof(TGAHeader); i++) {
-        for (size_t j = 0; j < 8; j++) {
-            chuj.writeBit((buff[i] & 0x80) == 0x80);
-            buff[i] <<= 1;
-        }
+    
+    for (auto pix : image) {
+        //std::cout<<(int) pix.red<<" "<<(int) pix.green<<" "<<(int) pix.blue<<std::endl;
     }
-    chuj.close();
+    std::cout<<"-----------------------------------------------------"<<std::endl;
+    
+    std::unique_ptr<Filter> filter = std::make_unique<LowerFilterProcess>(std::make_unique<IdQuantizer>());
+    std::vector<signedPixel> filteredImage = filter->applyFilter(image);
+    auto unfilteredImage = filter->removeFilter(filteredImage);    
+    filter = std::make_unique<UpperFilterProcess>(std::make_unique<IdQuantizer>()); 
+    std::vector<signedPixel> filteredImage2 = filter->applyFilter(image);
+    auto unfilteredImage2 = filter->removeFilter(filteredImage2);
 
-    BitReader chuj2 = BitReader();
-    chuj2.open("chujTest.txt");
-    uint8_t buff2[sizeof(TGAHeader)];
-    for (size_t i = 0; i < sizeof(TGAHeader); i++) {
-        for (size_t j = 0; j < 8; j++) {
-            buff2[i] <<= 1;
-            buff2[i] |= chuj2.getBit() ? 1 : 0;
-        }
+    std::vector<pixel> result;
+    result.reserve(filteredImage.size());
+
+    for (size_t i = 1; i < filteredImage.size(); i++) {
+       // std::cout<<filteredImage[i].red<<" "<<filteredImage[i].green<<" "<<filteredImage[i].blue<<std::endl;
+       // std::cout<<filteredImage[i].red - unfilteredImage[i].red<<" "<<filteredImage[i].green - unfilteredImage[i].green<<" "<<filteredImage[i].blue - unfilteredImage[i].green<<std::endl;
+        //auto temp0 = signedPixel(image[i]) + signedPixel(image[i - 1]) - signedPixel(unfilteredImage[i].red * 2, unfilteredImage[i].green * 2, unfilteredImage[i].blue * 2);
+        //std::cout<<temp0.red<<" "<<temp0.green<<" "<<temp0.blue<<std::endl;
+
+        auto temp = signedPixel(image[i]) - signedPixel(image[i - 1]) - signedPixel(unfilteredImage2[i].red * 2, unfilteredImage2[i].green * 2, unfilteredImage2[i].blue * 2);
+        std::cout<<temp.red<<" "<<temp.green<<" "<<temp.blue<<std::endl;
     }
-    memcpy(&header, buff2, sizeof(TGAHeader));
 
-    std::cout<<header.width<<std::endl;*/
-
-    BitFiles bitFiles;
-    bitFiles.persistImage("tempImage", 8, image.size(), image, &header);
-
-    uint8_t temp;
-    uint64_t temp2;
-    image = bitFiles.retrieveImage("tempImage", temp, temp2, &header);
-
-    assert(temp2 == header.width * header.height);
-   // std::cout<<(int)header.img_t<<std::endl;
-    //std::cout<<(int)header.width<<std::endl;
-    std::cout<<(int)temp<<std::endl;
-    std::cout<<(int)temp2<<std::endl;
-    //assert(memcmp(&header, &headerCopy, sizeof(TGAHeader)) == 0);
+    for (size_t i = 0; i < filteredImage.size(); i++) {
+        result.push_back(pixel{(uint8_t)(unfilteredImage[i].red + unfilteredImage2[i].red), (uint8_t)(unfilteredImage[i].green + unfilteredImage2[i].green), (uint8_t)(unfilteredImage[i].blue + unfilteredImage2[i].blue)});
+    }
 
     TgaPersister persister;
-    persister.persistImage(argc[2], temp2, image, &header);
-
-    adapter.closeFile();
-
-
+    adapter.persistCopy(result, argc[2]);
 }

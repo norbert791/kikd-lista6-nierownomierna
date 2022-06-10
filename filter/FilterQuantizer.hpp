@@ -2,6 +2,7 @@
 #define FILTER_QUANTIZER_HPP
 
 #include <iostream>
+#include <vector>
 #include "image.h"
 
 

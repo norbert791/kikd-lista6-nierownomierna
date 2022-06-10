@@ -32,7 +32,7 @@ std::vector<signedPixel> LowerFilterProcess::applyFilter(const std::vector<pixel
         lastError = result[i] - finalResult[i];
         inds.insert(finalResult[i]);
     }
-    std::cout<<"inds.size() = "<<inds.size()<<std::endl;
+   .. std::cout<<"inds.size() = "<<inds.size()<<std::endl;
     return quantizer->mapToIndexes(result);
 }
 
